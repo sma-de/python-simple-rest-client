@@ -23,6 +23,7 @@ class BaseResource:
         append_slash=False,
         json_encode_body=False,
         ssl_verify=None,
+        auth=None,
     ):
         self.api_root_url = api_root_url
         self.resource_name = resource_name
@@ -33,6 +34,7 @@ class BaseResource:
         self.json_encode_body = json_encode_body
         self.actions = self.actions or self.default_actions
         self.ssl_verify = True if ssl_verify is None else ssl_verify
+        self.auth = auth
 
         if self.json_encode_body:
             self.headers["Content-Type"] = "application/json"
@@ -87,6 +89,9 @@ class Resource(BaseResource):
         ):
             url = self.get_action_full_url(action_name, *args)
             method = self.get_action_method(action_name)
+
+            kwargs.setdefault('auth', self.auth)
+
             request = Request(
                 url=url,
                 method=method,

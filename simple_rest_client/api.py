@@ -13,6 +13,7 @@ class API:
         append_slash=False,
         json_encode_body=False,
         ssl_verify=None,
+        auth=None,
     ):
         self.api_root_url = api_root_url
         self.params = params or {}
@@ -21,6 +22,7 @@ class API:
         self.append_slash = append_slash
         self.json_encode_body = json_encode_body
         self.ssl_verify = True if ssl_verify is None else ssl_verify
+        self.auth = auth
         self._resources = {}
 
         if self.json_encode_body:
@@ -36,6 +38,7 @@ class API:
         timeout=None,
         append_slash=False,
         json_encode_body=False,
+        auth=None,
     ):
         resource_valid_name = self.correct_attribute_name(resource_name)
         resource_class = resource_class or Resource
@@ -48,6 +51,7 @@ class API:
             append_slash=append_slash or self.append_slash,
             json_encode_body=json_encode_body or self.json_encode_body,
             ssl_verify=self.ssl_verify,
+            auth=auth or self.auth,
         )
         self._resources[resource_valid_name] = resource
         setattr(self, resource_valid_name, resource)
